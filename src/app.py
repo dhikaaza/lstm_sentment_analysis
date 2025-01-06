@@ -16,17 +16,8 @@ english_stops = set(stopwords.words('english'))
 MODEL_PATH = "./models/model_lstm.h5.keras"
 TOKENIZER_PATH = "./models/tokenizer.pkl"
 
-# Pengecekan model dan tokenizer
-try:
-    model = load_model(MODEL_PATH, compile=False)
-except Exception as e:
-    st.error(f"Terjadi kesalahan saat memuat model: {str(e)}")
-
-try:
-    tokenizer = joblib.load(TOKENIZER_PATH)
-except Exception as e:
-    st.error(f"Terjadi kesalahan saat memuat tokenizer: {str(e)}")
-
+model = load_model(MODEL_PATH)
+tokenizer = joblib.load(TOKENIZER_PATH)
 MAX_LENGTH = 17  # Harus sama dengan max_length saat training
 
 # Fungsi preprocessing
@@ -46,17 +37,9 @@ def predict_sentiment(text):
     preprocessed_text = preprocess_text(text)
     text_seq = tokenizer.texts_to_sequences([preprocessed_text])
     text_pad = pad_sequences(text_seq, maxlen=MAX_LENGTH, padding='post', truncating='post')
-    
-    try:
-        prediction = model.predict(text_pad)
-        if prediction is None or prediction.size == 0:
-            st.error("Prediksi tidak valid.")
-            return "Invalid", 0.0
-        sentiment = "Positive" if prediction > 0.5 else "Negative"
-        return sentiment, prediction[0][0]
-    except Exception as e:
-        st.error(f"Terjadi kesalahan saat prediksi: {str(e)}")
-        return "Error", 0.0
+    prediction = model.predict(text_pad)
+    sentiment = "Positive" if prediction > 0.5 else "Negative"
+    return sentiment, prediction[0][0]
 
 # Informasi aplikasi
 st.set_page_config(
@@ -64,7 +47,7 @@ st.set_page_config(
     page_icon="./assets/favicon.ico" 
 )
 
-st.title("Sentiment Analysis Twitch")
+st.title("Sentiment Prediction for Twitch Apps")
 
 # Input ulasan dari pengguna
 user_input = st.text_area("Masukkan ulasan aplikasi Anda di bawah ini:", "")
