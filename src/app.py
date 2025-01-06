@@ -9,6 +9,13 @@ from nltk.stem import WordNetLemmatizer
 # Inisialisasi NLTK
 nltk.download('stopwords')
 nltk.download('wordnet')
+
+# Informasi aplikasi
+st.set_page_config(
+    page_title="Twitch Prediction Sentiment", 
+    page_icon="./assets/favicon.ico" 
+)
+
 lemmatizer = WordNetLemmatizer()
 english_stops = set(stopwords.words('english'))
 
@@ -57,12 +64,6 @@ def predict_sentiment(text):
     except Exception as e:
         st.error(f"Terjadi kesalahan saat prediksi: {str(e)}")
         return "Error", 0.0
-
-# Informasi aplikasi
-st.set_page_config(
-    page_title="Twitch Prediction Sentiment", 
-    page_icon="./assets/favicon.ico" 
-)
 
 st.title("Sentiment Analysis Twitch")
 
