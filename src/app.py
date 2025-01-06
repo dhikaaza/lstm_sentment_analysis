@@ -16,7 +16,7 @@ english_stops = set(stopwords.words('english'))
 MODEL_PATH = "./models/model_lstm.h5.keras"
 TOKENIZER_PATH = "./models/tokenizer.pkl"
 
-# Pengecekan model dan tokenizer
+# Pengecekan model dan tokenizers
 try:
     model = load_model(MODEL_PATH, compile=False)
 except Exception as e:
